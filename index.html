@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — IT Programmer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f3;--bg2:#f0ede4;--ink:#1a1714;--ink2:#5a5450;
+  --lime:#c8f135;--coral:#ff6b4a;--sky:#4fc4f9;--violet:#8b5cf6;
+  --pink:#f472b6;--mint:#34d399;--yellow:#fbbf24;--card:#ffffff;
+  --border:rgba(26,23,20,0.1);--shadow:4px 4px 0px #1a1714;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cur{position:fixed;width:14px;height:14px;background:var(--coral);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,background .2s}
+.cur2{position:fixed;width:40px;height:40px;border:2px solid var(--ink);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .15s ease}
+
+/* PROGRESS */
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--coral);z-index:300;width:0;transition:width .1s}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1rem 3rem;display:flex;align-items:center;justify-content:space-between;background:rgba(250,248,243,.94);backdrop-filter:blur(16px);border-bottom:2px solid var(--ink)}
+.logo{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.logo .dot{width:10px;height:10px;background:var(--coral);border-radius:50%;display:inline-block;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.85rem;font-weight:500;color:var(--ink2);text-decoration:none;letter-spacing:.02em;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:2px;background:var(--coral);transition:width .25s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{width:100%}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none}
+.ham span{display:block;width:22px;height:2px;background:var(--ink);transition:all .3s}
+.ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mob-menu{display:none;position:fixed;inset:0;z-index:99;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:2rem;border-top:2px solid var(--ink)}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:2.2rem;font-weight:800;color:var(--ink);text-decoration:none;transition:color .15s}
+.mob-menu a:hover{color:var(--coral)}
+
+/* HERO */
+#home{min-height:100vh;padding:0 3rem;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.deco-c1{position:absolute;width:380px;height:380px;border-radius:50%;background:var(--lime);right:-60px;top:-60px;opacity:.3;pointer-events:none}
+.deco-c2{position:absolute;width:180px;height:180px;border-radius:50%;background:var(--sky);bottom:100px;right:260px;opacity:.22;pointer-events:none}
+.deco-sq{position:absolute;width:140px;height:140px;background:var(--pink);bottom:60px;left:80px;opacity:.18;transform:rotate(25deg);pointer-events:none}
+.deco-dots{position:absolute;top:110px;left:3rem;display:grid;grid-template-columns:repeat(6,1fr);gap:12px;opacity:.15;pointer-events:none}
+.deco-dot{width:6px;height:6px;background:var(--ink);border-radius:50%}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:var(--lime);border:2px solid var(--ink);padding:.35rem .9rem;border-radius:99px;font-family:'DM Mono',monospace;font-size:.72rem;font-weight:500;margin-bottom:1.5rem;position:relative;z-index:1;opacity:0;animation:up .7s .3s forwards;width:fit-content}
+.hero-tag::before{content:'';width:8px;height:8px;background:var(--coral);border-radius:50%;animation:blink 1.5s infinite}
+.hero-name{font-size:clamp(3.5rem,9vw,7.5rem);font-weight:800;line-height:.92;letter-spacing:-.04em;position:relative;z-index:1;opacity:0;animation:up .7s .5s forwards}
+.stroke{-webkit-text-stroke:2.5px var(--ink);color:transparent}
+.hl{background:var(--lime);padding:0 .15em;display:inline-block;transform:rotate(-1.5deg);line-height:1.1}
+.hero-role{font-family:'DM Mono',monospace;font-size:clamp(.85rem,1.8vw,1rem);margin-top:1.2rem;color:var(--coral);font-weight:500;position:relative;z-index:1;opacity:0;animation:up .7s .7s forwards}
+.hero-sub{margin-top:.8rem;font-size:1rem;color:var(--ink2);line-height:1.65;max-width:500px;position:relative;z-index:1;opacity:0;animation:up .7s .9s forwards}
+.hero-cta{margin-top:2.2rem;display:flex;gap:1rem;flex-wrap:wrap;position:relative;z-index:1;opacity:0;animation:up .7s 1.1s forwards}
+.btn{display:inline-block;padding:.85rem 1.8rem;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none;cursor:none;border:2px solid var(--ink);transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
+.btn-p{background:var(--ink);color:var(--bg);box-shadow:var(--shadow)}
+.btn-p:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.btn-o{background:transparent;color:var(--ink);box-shadow:var(--shadow)}
+.btn-o:hover{background:var(--lime);transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink)}
+.hero-photo{position:absolute;right:3rem;bottom:2rem;width:clamp(200px,24vw,320px);z-index:1;opacity:0;animation:up .8s 1.2s forwards}
+.photo-box{width:100%;aspect-ratio:1;border-radius:20px;border:3px solid var(--ink);background:var(--bg2);overflow:hidden;box-shadow:var(--shadow);position:relative}
+.photo-box img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.ph-pl{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;color:var(--ink2);font-family:'DM Mono',monospace;font-size:.7rem;text-align:center;padding:1rem}
+.ph-pl svg{width:52px;height:52px;opacity:.22}
+.photo-tag{position:absolute;bottom:-16px;right:-14px;background:var(--coral);border:2px solid var(--ink);border-radius:8px;padding:.4rem .85rem;font-family:'DM Mono',monospace;font-size:.65rem;font-weight:500;color:#fff;box-shadow:3px 3px 0 var(--ink)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:2.5rem;position:relative;z-index:1;opacity:0;animation:up .7s 1.3s forwards;flex-wrap:wrap}
+.stat-n{font-size:2.2rem;font-weight:800;line-height:1}
+.stat-l{font-size:.7rem;color:var(--ink2);font-family:'DM Mono',monospace;margin-top:.25rem}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION */
+section{position:relative;z-index:2}
+.sw{padding:6rem 3rem}
+.stag{display:inline-flex;align-items:center;gap:.5rem;font-family:'DM Mono',monospace;font-size:.72rem;font-weight:500;color:var(--ink2);margin-bottom:.9rem}
+.stag::before{content:'';display:block;width:20px;height:2px;background:var(--coral)}
+.stitle{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;line-height:1;letter-spacing:-.03em;margin-bottom:3rem}
+.stitle span{color:var(--coral)}
+.stitle .u{text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:4px;text-underline-offset:5px}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.on{opacity:1;transform:translateY(0)}
+
+/* MARQUEE */
+.mq{background:var(--coral);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:.8rem 0;overflow:hidden}
+.mqi{display:flex;gap:0;width:max-content;animation:mq 20s linear infinite}
+.mqi span{font-family:'DM Mono',monospace;font-size:.85rem;font-weight:500;color:#fff;white-space:nowrap;padding:0 1.5rem}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ABOUT */
+#about{background:var(--bg2);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.about-g{display:grid;grid-template-columns:auto 1fr;gap:4rem;align-items:center}
+.aimg-w{position:relative;width:270px;flex-shrink:0}
+.aimg-i{border:3px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:6px 6px 0 var(--ink);aspect-ratio:3/4;background:var(--bg)}
+.aimg-i img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ab1{position:absolute;top:-14px;right:-14px;background:var(--violet);color:#fff;border:2px solid var(--ink);border-radius:10px;padding:.45rem .85rem;font-family:'DM Mono',monospace;font-size:.68rem;box-shadow:3px 3px 0 var(--ink);white-space:nowrap}
+.ab2{position:absolute;bottom:-14px;left:-14px;background:var(--lime);color:var(--ink);border:2px solid var(--ink);border-radius:10px;padding:.45rem .85rem;font-family:'DM Mono',monospace;font-size:.68rem;box-shadow:3px 3px 0 var(--ink);white-space:nowrap}
+.abody p{color:var(--ink2);line-height:1.75;margin-bottom:1.1rem;font-size:.98rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+.chip{padding:.35rem .85rem;border-radius:99px;font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;border:1.5px solid var(--ink);transition:all .2s;cursor:default}
+.chip:nth-child(4n+1){background:var(--lime)}
+.chip:nth-child(4n+2){background:var(--sky)}
+.chip:nth-child(4n+3){background:var(--pink)}
+.chip:nth-child(4n){background:var(--yellow)}
+.chip:hover{transform:translateY(-3px);box-shadow:3px 3px 0 var(--ink)}
+.abtns{margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap}
+
+/* SKILLS */
+.sk-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
+.sk-c{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:1.6rem;transition:all .2s;position:relative;overflow:hidden}
+.sk-c::after{content:'';position:absolute;top:0;right:0;width:56px;height:56px;clip-path:polygon(100% 0,0 0,100% 100%);opacity:.7}
+.sk-c:nth-child(1)::after{background:var(--coral)}
+.sk-c:nth-child(2)::after{background:var(--violet)}
+.sk-c:nth-child(3)::after{background:var(--sky)}
+.sk-c:nth-child(4)::after{background:var(--mint)}
+.sk-c:nth-child(5)::after{background:var(--yellow)}
+.sk-c:nth-child(6)::after{background:var(--pink)}
+.sk-c:hover{transform:translate(-4px,-4px);box-shadow:8px 8px 0 var(--ink)}
+.sk-ico{font-size:1.8rem;margin-bottom:1rem}
+.sk-c h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.sk-c p{font-size:.82rem;color:var(--ink2);line-height:1.6;margin-bottom:1rem}
+.sk-pct{font-family:'DM Mono',monospace;font-size:.66rem;color:var(--ink2);text-align:right;margin-bottom:.3rem}
+.sk-bar{height:6px;background:var(--bg2);border-radius:99px;overflow:hidden;border:1.5px solid var(--ink)}
+.sk-fill{height:100%;border-radius:99px;transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.16,1,.3,1) .3s}
+.sk-c.act .sk-fill{transform:scaleX(1)}
+.fc{background:var(--coral)}.fv{background:var(--violet)}.fs{background:var(--sky)}.fm{background:var(--mint)}.fy{background:var(--yellow)}.fp{background:var(--pink)}
+
+/* PROJECTS */
+#projects{background:var(--bg2);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
+.frow{display:flex;gap:.5rem;flex-wrap:wrap}
+.fb{padding:.35rem .9rem;border-radius:6px;background:transparent;border:1.5px solid var(--ink);font-family:'DM Mono',monospace;font-size:.7rem;cursor:none;transition:all .2s;color:var(--ink)}
+.fb.on,.fb:hover{background:var(--ink);color:var(--bg)}
+.pj-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:1.25rem}
+.pj-c{background:var(--card);border:2px solid var(--ink);border-radius:14px;overflow:hidden;transition:all .25s}
+.pj-c:hover{transform:translate(-5px,-5px);box-shadow:9px 9px 0 var(--ink)}
+.pj-img{aspect-ratio:16/10;overflow:hidden;position:relative}
+.pj-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.pj-c:hover .pj-img img{transform:scale(1.06)}
+.pj-pl{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--ink2);font-family:'DM Mono',monospace;font-size:.7rem;text-align:center;padding:1rem}
+.pj-pl svg{opacity:.2;width:36px;height:36px}
+.pj-ov{position:absolute;inset:0;background:rgba(26,23,20,.88);display:flex;align-items:center;justify-content:center;gap:.75rem;opacity:0;transition:opacity .25s;backdrop-filter:blur(3px)}
+.pj-c:hover .pj-ov{opacity:1}
+.ob{padding:.55rem 1.1rem;border-radius:6px;font-family:'DM Mono',monospace;font-size:.7rem;font-weight:500;cursor:none;text-decoration:none;border:1.5px solid var(--bg);color:var(--bg);transition:all .15s}
+.ob:hover{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.pj-b{padding:1.4rem;border-top:2px solid var(--ink)}
+.pj-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.7rem}
+.pt{padding:.2rem .6rem;border-radius:4px;font-family:'DM Mono',monospace;font-size:.62rem;font-weight:500;border:1px solid var(--ink)}
+.pt:nth-child(1){background:var(--lime)}
+.pt:nth-child(2){background:var(--sky)}
+.pt:nth-child(3){background:var(--pink)}
+.pt:nth-child(4){background:var(--yellow)}
+.pj-b h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.pj-b p{font-size:.82rem;color:var(--ink2);line-height:1.6}
+
+/* EXPERIENCE */
+.tl{max-width:760px;position:relative}
+.tl::before{content:'';position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:repeating-linear-gradient(180deg,var(--ink) 0,var(--ink) 6px,transparent 6px,transparent 14px)}
+.tli{padding-left:3.5rem;margin-bottom:2.8rem;position:relative}
+.tld{position:absolute;left:0;top:4px;width:26px;height:26px;border-radius:50%;border:2.5px solid var(--ink);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .25s}
+.tli:hover .tld{background:var(--coral);transform:scale(1.15)}
+.tl-date{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--ink2);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.tl-date em{background:var(--lime);border:1.5px solid var(--ink);border-radius:4px;padding:.15rem .5rem;color:var(--ink);font-weight:500;font-style:normal}
+.tli h3{font-size:1.05rem;font-weight:700;margin-bottom:.25rem}
+.tl-co{font-size:.85rem;color:var(--violet);font-weight:600;margin-bottom:.7rem}
+.tli p{font-size:.84rem;color:var(--ink2);line-height:1.7}
+
+/* CONTACT */
+#contact{background:var(--ink);color:var(--bg);border-top:2px solid var(--ink)}
+#contact .stag{color:rgba(250,248,243,.5)}
+#contact .stag::before{background:var(--lime)}
+#contact .stitle{color:var(--bg)}
+#contact .stitle span{color:var(--lime)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.cdesc{font-size:1rem;color:rgba(250,248,243,.6);line-height:1.75;margin-bottom:2rem}
+.cls{display:flex;flex-direction:column;gap:.75rem}
+.cl{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border-radius:10px;background:rgba(250,248,243,.05);border:1.5px solid rgba(250,248,243,.1);text-decoration:none;color:var(--bg);transition:all .2s}
+.cl:hover{background:rgba(250,248,243,.09);transform:translateX(6px);border-color:var(--lime)}
+.ci{width:38px;height:38px;border-radius:8px;background:rgba(250,248,243,.07);border:1px solid rgba(250,248,243,.12);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.ct strong{display:block;font-size:.63rem;font-family:'DM Mono',monospace;color:rgba(250,248,243,.38);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem}
+.ct span{font-size:.87rem}
+.cform{display:flex;flex-direction:column;gap:.85rem}
+.fg{display:flex;flex-direction:column;gap:.4rem}
+.fg label{font-family:'DM Mono',monospace;font-size:.66rem;color:rgba(250,248,243,.45);letter-spacing:.08em;text-transform:uppercase}
+.fg input,.fg textarea{background:rgba(250,248,243,.06);border:1.5px solid rgba(250,248,243,.13);color:var(--bg);font-family:'Bricolage Grotesque',sans-serif;font-size:.92rem;padding:.8rem 1rem;border-radius:8px;outline:none;transition:border-color .2s;resize:none}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(250,248,243,.22)}
+.fg input:focus,.fg textarea:focus{border-color:var(--lime)}
+.fg textarea{min-height:120px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.bsend{background:var(--lime);color:var(--ink);border:2px solid var(--lime);box-shadow:4px 4px 0 rgba(250,248,243,.2);padding:.9rem 1.8rem;border-radius:8px;font-weight:700;font-size:.88rem;cursor:none;transition:all .2s;font-family:'Bricolage Grotesque',sans-serif}
+.bsend:hover{background:#b8e020;transform:translate(-3px,-3px);box-shadow:7px 7px 0 rgba(250,248,243,.18)}
+
+/* FOOTER */
+footer{background:var(--ink);border-top:2px solid rgba(250,248,243,.1);padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer p{font-size:.76rem;font-family:'DM Mono',monospace;color:rgba(250,248,243,.38)}
+footer p span{color:var(--lime)}
+.socs{display:flex;gap:.75rem}
+.soc{width:36px;height:36px;border-radius:8px;background:rgba(250,248,243,.05);border:1px solid rgba(250,248,243,.1);display:flex;align-items:center;justify-content:center;text-decoration:none;color:rgba(250,248,243,.5);transition:all .2s}
+.soc:hover{background:var(--lime);border-color:var(--lime);color:var(--ink);transform:translateY(-3px)}
+.soc svg{width:15px;height:15px;fill:currentColor}
+
+/* BACK TOP */
+.btt{position:fixed;bottom:2rem;right:2rem;z-index:100;width:44px;height:44px;border-radius:8px;background:var(--lime);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:none;font-size:1.1rem;font-weight:700;box-shadow:3px 3px 0 var(--ink);opacity:0;pointer-events:none;transition:all .3s}
+.btt.show{opacity:1;pointer-events:auto}
+.btt:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 var(--ink)}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--lime);font-family:'DM Mono',monospace;font-size:.78rem;padding:.7rem 1.4rem;border-radius:8px;border:2px solid var(--lime);z-index:999;transition:transform .3s;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  #home,.sw{padding:5rem 1.5rem}
+  #home{padding-top:6rem}
+  .hero-photo{display:none}
+  .about-g{grid-template-columns:1fr;gap:2rem}
+  .aimg-w{width:100%;max-width:240px}
+  .cg{grid-template-columns:1fr;gap:2.5rem}
+  .fr{grid-template-columns:1fr}
+  footer{padding:1.5rem;flex-direction:column;text-align:center}
+}
+@media(max-width:540px){
+  .pj-g,.sk-g{grid-template-columns:1fr}
+  .hero-stats{gap:1.5rem}
+  .stat-n{font-size:1.8rem}
+}
+</style>
+</head>
+<body>
+<div class="cur" id="cur"></div>
+<div class="cur2" id="cur2"></div>
+<div class="prog" id="prog"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#home" class="logo"><span class="dot"></span>&lt;Mrbi12 /&gt;</a>
+  <ul class="nav-links">
+    <li><a href="#home">home</a></li>
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="#home" onclick="closeMob()">Home</a>
+  <a href="#about" onclick="closeMob()">About</a>
+  <a href="#skills" onclick="closeMob()">Skills</a>
+  <a href="#projects" onclick="closeMob()">Projects</a>
+  <a href="#experience" onclick="closeMob()">Experience</a>
+  <a href="#contact" onclick="closeMob()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="deco-c1"></div>
+  <div class="deco-c2"></div>
+  <div class="deco-sq"></div>
+  <div class="deco-dots" id="ddots"></div>
+
+  <div class="hero-tag">✦ Available for Work</div>
+  <h1 class="hero-name">
+    <!-- ✏️ GANTI NAMA KAMU -->
+    <div>Mochamad</div>
+    <div><span class="hl">Robi</span>&nbsp;<span class="stroke">Here</span></div>
+  </h1>
+  <div class="hero-role">&gt;&nbsp;<span id="typed"></span><span style="color:var(--coral)">_</span></div>
+  <p class="hero-sub">
+    <!-- ✏️ GANTI DESKRIPSI SINGKAT -->
+    IT Programmer yang passionate membangun solusi digital. Suka eksperimen teknologi baru dan bikin produk yang beneran berdampak.
+  </p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-p">Lihat Projects →</a>
+    <a href="#contact" class="btn btn-o">Hire Me ✉</a>
+  </div>
+
+  <!-- ✏️ FOTO — uncomment img dan isi src foto kamu -->
+  <div class="hero-photo">
+    <div class="photo-box">
+      <!-- <img src="foto.jpg" alt="Profile"> -->
+      <div class="ph-pl">
+        <img src="img/profil1.jpeg" alt="Profile" class="profile-img">
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <!-- ✏️ GANTI ANGKA SESUAI KAMU -->
+    <div><div class="stat-n" data-n="5">0</div><div class="stat-l">yrs experience</div></div>
+    <div><div class="stat-n" data-n="15">0</div><div class="stat-l">projects done</div></div>
+    <div><div class="stat-n" data-n="8">0</div><div class="stat-l">happy clients</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq"><div class="mqi" id="marq"></div></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sw">
+    <div class="stag">About Me</div>
+    <h2 class="stitle">Halo, kenalan<br><span>dulu yuk! 👋</span></h2>
+    <div class="about-g reveal">
+      <div class="aimg-w">
+        <div class="aimg-i">
+          <!-- ✏️ FOTO ABOUT: uncomment dan ganti src -->
+          <!-- <img src="foto-about.jpg" alt="About"> -->
+          <div class="ph-pl">
+            <img src="img/MSK05080.jpg" alt="Profile" class="profile-img">
+            Mochamad Robi<br><small>ganti src di HTML</small>
+          </div>
+        </div>
+        <div class="ab1">🚀 Full Stack Dev & Cyber Security</div>
+        <div class="ab2">📍 Serang, Banten</div>
+      </div>
+      <div class="abody">
+        <!-- ✏️ EDIT BIO KAMU -->
+        <p>Halo! Saya seorang IT Programmer yang passionate sama dunia teknologi dan pengembangan software. Sejak kuliah udah jatuh cinta sama coding dan terus belajar setiap harinya.</p>
+        <p>Saya enjoy kerja di lingkungan yang dinamis dan kolaboratif, selalu eksperimen sama teknologi terbaru. Percaya bahwa kode yang baik bukan cuma yang berfungsi, tapi juga yang mudah dibaca.</p>
+        <p>Di luar coding, suka ngulik gadget, main game, dan nonton konten tech. Let's build something amazing! 🔥</p>
+        <!-- ✏️ EDIT SKILL CHIPS -->
+        <div class="chips">
+          <span class="chip">JavaScript</span><span class="chip">Python</span><span class="chip">React.js</span>
+          <span class="chip">Node.js</span><span class="chip">Laravel</span><span class="chip">MySQL</span>
+          <span class="chip">PostgreSQL</span><span class="chip">Docker</span><span class="chip">Git</span>
+          <span class="chip">REST API</span><span class="chip">Figma</span><span class="chip">Linux</span>
+        </div>
+        <div class="abtns">
+          <a href="#" class="btn btn-p" style="font-size:.82rem">Download CV ↓</a>
+          <a href="#contact" class="btn btn-o" style="font-size:.82rem">Hire Me ✉</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="sw">
+    <div class="stag">Tech Stack</div>
+    <h2 class="stitle">Skill &amp; <span class="u">Expertise</span></h2>
+    <div class="sk-g">
+      <!-- ✏️ EDIT SESUAI SKILL DAN PERSENTASE KAMU -->
+      <div class="sk-c reveal"><div class="sk-ico">⚡</div><h3>Frontend Development</h3><p>UI interaktif & responsif pakai React, Vue, dan modern web tech.</p><div class="sk-pct">85%</div><div class="sk-bar"><div class="sk-fill fc" style="width:85%"></div></div></div>
+      <div class="sk-c reveal"><div class="sk-ico">🔧</div><h3>Backend Development</h3><p>API scalable & efisien dengan Node.js, Laravel, dan Python.</p><div class="sk-pct">80%</div><div class="sk-bar"><div class="sk-fill fv" style="width:80%"></div></div></div>
+      <div class="sk-c reveal"><div class="sk-ico">🗄️</div><h3>Database</h3><p>Kelola database relasional & NoSQL, optimasi query dan skema.</p><div class="sk-pct">78%</div><div class="sk-bar"><div class="sk-fill fs" style="width:78%"></div></div></div>
+      <div class="sk-c reveal"><div class="sk-ico">📱</div><h3>Mobile Development</h3><p>Aplikasi mobile cross-platform pakai React Native dan Flutter.</p><div class="sk-pct">65%</div><div class="sk-bar"><div class="sk-fill fm" style="width:65%"></div></div></div>
+      <div class="sk-c reveal"><div class="sk-ico">☁️</div><h3>DevOps &amp; Cloud</h3><p>Deployment, CI/CD, Docker, dan cloud services AWS/GCP.</p><div class="sk-pct">60%</div><div class="sk-bar"><div class="sk-fill fy" style="width:60%"></div></div></div>
+      <div class="sk-c reveal"><div class="sk-ico">🎨</div><h3>UI/UX Design</h3><p>Prototype & wireframe user-friendly pakai Figma dan Adobe XD.</p><div class="sk-pct">70%</div><div class="sk-bar"><div class="sk-fill fp" style="width:70%"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sw">
+    <div class="ph reveal">
+      <div>
+        <div class="stag">Portfolio</div>
+        <h2 class="stitle" style="margin-bottom:0">Project <span>Saya 🛠️</span></h2>
+      </div>
+      <div class="frow">
+        <button class="fb on" data-f="all">All</button>
+        <button class="fb" data-f="web">Web</button>
+        <button class="fb" data-f="mobile">Mobile</button>
+        <button class="fb" data-f="backend">Backend</button>
+      </div>
+    </div>
+    <div class="pj-g" id="pg">
+      <!-- ✏️ EDIT PROJECT KAMU — ganti nama, deskripsi, tag, dan link -->
+      <div class="pj-c reveal" data-cat="backend">
+        <div class="pj-img" style="background:#f0fdf4">
+          <img src="img/project1.png" alt="Project 1" class="project-img">
+        <div class="pj-ov">
+            <a href="#" class="ob">Live Demo</a>
+            <a href="#" class="ob">GitHub</a>
+        </div>
+        </div>
+        <div class="pj-b"><div class="pj-tags"><span class="pt">Laravel</span><span class="pt">Mysql</span></div><h3>Genba Sistem</h3><p>Platform Digital Network Sistem, dan dashboard admin modern.</p></div>
+      </div>
+      <div class="pj-c reveal" data-cat="web">
+        <div class="pj-img" style="background:#fdf4ff">
+          <img src="img/project2.png" alt="Project 2" class="project-img">
+        <div class="pj-ov">
+            <a href="#" class="ob">Live Demo</a>
+            <a href="#" class="ob">GitHub</a>
+        </div>
+        </div>
+        <div class="pj-b"><div class="pj-tags"><span class="pt">Laravel</span><span class="pt">Mysql</span></div><h3>Sistem Infromasi Masjid</h3><p>Website Masjid dengan fitur admin dan donasi qris</p></div>
+      </div>
+      <div class="pj-c reveal" data-cat="backend">
+        <div class="pj-img" style="background:#eff6ff">
+           <img src="img/project3.png" alt="Project 3" class="project-img">
+        <div class="pj-ov">
+            <a href="#" class="ob">Live Demo</a>
+            <a href="#" class="ob">GitHub</a>
+        </div>
+        </div>
+        <div class="pj-b"><div class="pj-tags"><span class="pt">Laravel</span><span class="pt">RRD Mikrotik</span><span class="pt">MySQL</span></span></div><h3>REST API Mikrotik Jaringan</h3><p>Monitor Jaringan realtime dan traffic penggunaan hotspot Wifi Secara realtime</p></div>
+      </div>
+      <div class="pj-c reveal" data-cat="web">
+        <div class="pj-img" style="background:#fefce8">
+          <img src="img/project4.png" alt="Project 4" class="project-img">
+        <div class="pj-ov">
+            <a href="#" class="ob">Live Demo</a>
+            <a href="#" class="ob">GitHub</a>
+        </div>
+        </div>
+        <div class="pj-b"><div class="pj-tags"><span class="pt">Vue.js</span><span class="pt">Laravel</span><span class="pt">PostgreSQL & Mysql</span></div><h3>POS Management Sistem</h3><p>Sistem POS Kasir menggunakan payment gateway lengkap</p></div>
+      </div>
+      <div class="pj-c reveal" data-cat="web">
+          <div class="pj-img" style="background:#fefce8">
+          <img src="img/project5.png" alt="Project 5" class="project-img">
+        <div class="pj-ov">
+            <a href="#" class="ob">Live Demo</a>
+            <a href="#" class="ob">GitHub</a>
+        </div>
+        </div>
+        <div class="pj-b"><div class="pj-tags"><span class="pt">Next.js</span><span class="pt">vue.js</span><span class="pt">Tailwind</span></div><h3>Gedung Pernikahan</h3><p>Website informasi gedung pernikahan dengan fitur admin dan menu komentar</p></div>
+      </div>
+      <div class="pj-c reveal" data-cat="mobile">
+        <div class="pj-img" style="background:#f0fdfa">
+          <div class="pj-pl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Screenshot project</div>
+          <div class="pj-ov"><a href="#" class="ob">Play Store</a><a href="#" class="ob">GitHub</a></div>
+        </div>
+        <div class="pj-b"><div class="pj-tags"><span class="pt">Flutter</span><span class="pt">Dart</span><span class="pt">Firebase</span></div><h3>Food Delivery App</h3><p>Aplikasi pesan antar makanan dengan real-time tracking & payment integration.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sw">
+    <div class="stag">Journey</div>
+    <h2 class="stitle">Pengalaman &amp;<br><span>Pendidikan 📚</span></h2>
+    <div class="tl reveal">
+      <!-- ✏️ EDIT PENGALAMAN DAN PENDIDIKAN KAMU -->
+      <div class="tli">
+        <div class="tld">💼</div>
+        <div class="tl-date"><em>2025 — Now</em></div>
+        <h3>Full Stack Developer & Cyber Security</h3>
+        <div class="tl-co">PT. Mitra Sendang Kemakmuran · Serang</div>
+        <p>Mengembangkan & maintain aplikasi web dengan React dan Node.js serta laravel, Kolaborasi dalam tim agile, deliver fitur baru tiap sprint. Berhasil reduce load time 40% lewat optimasi kode.</p>
+      </div>
+      <div class="tli">
+        <div class="tld">💻</div>
+        <div class="tl-date"><em>2022 — 2024</em></div>
+        <h3>Full Stack Developer</h3>
+        <div class="tl-co">PT Viva Tristar Perkasa · Serang</div>
+        <p>Mengembangkan & maintain aplikasi web dengan laravel & CI3 Serta Database.</p>
+      </div>
+      <div class="tli">
+        <div class="tld">🎓</div>
+        <div class="tl-date"><em>2018 — 2022</em></div>
+        <h3>S1 Ilmu Komputer</h3>
+        <div class="tl-co">Universitas Bina Bangsa · IPK: 3.41/4.0</div>
+        <p>Fokus pada pengembangan perangkat lunak.</p>
+      </div>
+      <div class="tli">
+        <div class="tld">🏆</div>
+        <div class="tl-date"><em>2025</em></div>
+        <h3>Dicoding Indonesia — Cloud Computing</h3>
+        <div class="tl-co">Google · Gojek · Tokopedia · Traveloka</div>
+        <p>Program intensif pengembangan talenta digital Indonesia. Lulus dengan predikat distinction.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sw">
+    <div class="stag">Get In Touch</div>
+    <h2 class="stitle">Yuk <span>Ngobrol! 💬</span></h2>
+    <div class="cg reveal">
+      <div>
+        <p class="cdesc">Saya selalu terbuka untuk project baru, kolaborasi, atau sekadar ngobrol soal teknologi. Jangan ragu untuk reach out!</p>
+        <div class="cls">
+          <!-- ✏️ GANTI INFO KONTAK KAMU -->
+          <a href="mailto:mochamadrobi212@gmail.com" class="cl"><div class="ci">✉️</div><div class="ct"><strong>Email</strong><span>mochamadrobi212@gmail.com</span></div></a>
+          <a href="https://wa.me/6281289411035" target="_blank" class="cl"><div class="ci">💬</div><div class="ct"><strong>WhatsApp</strong><span>+62 812-8941-1035</span></div></a>
+          <a href="https://linkedin.com/in/mochamad-robi-9b4615206/" target="_blank" class="cl"><div class="ci">💼</div><div class="ct"><strong>LinkedIn</strong><span>linkedin.com/in/mochamadrobi</span></div></a>
+          <a href="https://github.com/Mochamad-Robi" target="_blank" class="cl"><div class="ci">🐙</div><div class="ct"><strong>GitHub</strong><span>github.com/Mochamad-Robi</span></div></a>
+        </div>
+      </div>
+      <div>
+        <div class="cform">
+          <div class="fr">
+            <div class="fg"><label>Nama</label><input id="fn" type="text" placeholder="Nama"></div>
+            <div class="fg"><label>Email</label><input id="fe" type="email" placeholder="Email"></div>
+          </div>
+          <div class="fg"><label>Subjek</label><input id="fs" type="text" placeholder="Kolaborasi Project"></div>
+          <div class="fg"><label>Pesan</label><textarea id="fm" placeholder="Halo! Saya tertarik untuk..."></textarea></div>
+          <button class="bsend" onclick="kirim()">Kirim Pesan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <!-- ✏️ GANTI NAMA KAMU -->
+  <p>Dibuat oleh <span>Mochamad Robi</span> · 2026</p>
+  <div class="socs">
+    <a href="https://github.com/Mochamad-Robi" target="_blank" class="soc"><svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+    <a href="https://linkedin.com/in/mochamad-robi-9b4615206/" target="_blank" class="soc"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+    <a href="https://instagram.com/username" target="_blank" class="soc"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+  </div>
+</footer>
+
+<button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="toast" id="toast"></div>
+
+<script>
+// DOTS DECO
+const dd=document.getElementById('ddots');
+for(let i=0;i<48;i++){const d=document.createElement('div');d.className='deco-dot';dd.appendChild(d)}
+
+// MARQUEE
+const words=['JavaScript','Python','React.js','Node.js','Laravel','Docker','MySQL','Git','REST API','Flutter','TypeScript','Figma','Next.js','PostgreSQL','Vue.js','AWS'];
+const mi=document.getElementById('marq');
+const t=(words.concat(words)).map(w=>`<span>✦ ${w}</span>`).join('');
+mi.innerHTML=t+t;
+
+// CURSOR
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function anim(){fx+=(mx-fx)*.13;fy+=(my-fy)*.13;cur2.style.left=fx+'px';cur2.style.top=fy+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,.btn,.fb,.chip,.sk-c,.pj-c,.cl').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur2.style.width='54px';cur2.style.height='54px';cur.style.transform='translate(-50%,-50%) scale(0.4)'});
+  el.addEventListener('mouseleave',()=>{cur2.style.width='40px';cur2.style.height='40px';cur.style.transform='translate(-50%,-50%) scale(1)'});
+});
+
+// TYPED
+const roles=['Full Stack Developer','Web Developer','Cyber Security','Problem Solver','Tech Enthusiast'];
+let ri=0,ci=0,del=false;
+const tel=document.getElementById('typed');
+function type(){
+  const c=roles[ri];
+  if(!del){tel.textContent=c.slice(0,++ci);if(ci===c.length){del=true;setTimeout(type,1800);return}}
+  else{tel.textContent=c.slice(0,--ci);if(ci===0){del=false;ri=(ri+1)%roles.length}}
+  setTimeout(type,del?55:100);
+}
+setTimeout(type,1000);
+
+// SCROLL
+window.addEventListener('scroll',()=>{
+  const p=(scrollY/(document.body.scrollHeight-innerHeight))*100;
+  document.getElementById('prog').style.width=p+'%';
+  document.getElementById('btt').classList.toggle('show',scrollY>400);
+});
+
+// REVEAL
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');ro.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// SKILL BARS
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('act');so.unobserve(e.target)}}),{threshold:.35});
+document.querySelectorAll('.sk-c').forEach(c=>so.observe(c));
+
+// COUNTER
+function cnt(el,n){let c=0;const s=n/55;const t=setInterval(()=>{c=Math.min(c+s,n);el.textContent=Math.round(c)+'+';if(c>=n)clearInterval(t)},22)}
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('[data-n]').forEach(el=>cnt(el,+el.dataset.n));co.disconnect()}}),{threshold:.5});
+const hs=document.querySelector('.hero-stats');if(hs)co.observe(hs);
+
+// FILTER
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const f=b.dataset.f;
+    document.querySelectorAll('.pj-c').forEach(c=>{
+      const show=f==='all'||c.dataset.cat===f;
+      c.style.transition='all .3s';c.style.opacity=show?'1':'0.2';
+      c.style.transform=show?'':'scale(.97)';c.style.pointerEvents=show?'':'none';
+    });
+  });
+});
+
+// HAMBURGER
+const ham=document.getElementById('ham'),mob=document.getElementById('mob');
+ham.addEventListener('click',()=>{ham.classList.toggle('open');mob.classList.toggle('open');document.body.style.overflow=mob.classList.contains('open')?'hidden':''});
+function closeMob(){ham.classList.remove('open');mob.classList.remove('open');document.body.style.overflow=''}
+
+// FORM
+function kirim(){
+  const n=document.getElementById('fn').value.trim(),e=document.getElementById('fe').value.trim(),m=document.getElementById('fm').value.trim();
+  if(!n||!e||!m){showToast('⚠️ Lengkapi semua field dulu ya!');return}
+  // ✏️ GANTI NOMOR WA KAMU
+  const txt=`Halo! Saya ${n} (${e}).\n\n${m}`;
+  window.open(`https://wa.me/628xxxxxxxxx?text=${encodeURIComponent(txt)}`,'_blank');
+  showToast('✅ Membuka WhatsApp...');
+  ['fn','fe','fs','fm'].forEach(id=>document.getElementById(id).value='');
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+</script>
+</body>
+</html>
