@@ -232,6 +232,18 @@ footer p span{color:var(--lime)}
     gap:8px;
 }
 
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo-img{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+}
+
 @media(max-width:540px){
   .pj-g,.sk-g{grid-template-columns:1fr}
   .hero-stats{gap:1.5rem}
@@ -246,7 +258,10 @@ footer p span{color:var(--lime)}
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#home" class="logo"><span class="dot"></span>&lt;Mrbi12 /&gt;</a>
+  <a href="#home" class="logo">
+    <img src="img/logo1.png" alt="Logo" class="logo-img">
+    <span class="dot"></span>&lt;Mrbi12 /&gt;
+</a>
   <ul class="nav-links">
     <li><a href="#home">home</a></li>
     <li><a href="#about">about</a></li>
@@ -265,7 +280,7 @@ footer p span{color:var(--lime)}
   <a href="#experience" onclick="closeMob()">Experience</a>
   <a href="#contact" onclick="closeMob()">Contact</a>
 </div>
-
+ 
 <!-- HERO -->
 <section id="home">
   <div class="deco-c1"></div>
